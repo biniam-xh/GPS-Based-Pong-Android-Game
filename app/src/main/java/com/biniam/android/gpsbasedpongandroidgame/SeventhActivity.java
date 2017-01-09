@@ -7,15 +7,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-
-public class FirstActivity extends ActionBarActivity {
-
-
+/**
+ * Created by USER on 1/9/2017.
+ */
+public class SeventhActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_seventh);
     }
 
     @Override
@@ -37,11 +37,15 @@ public class FirstActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public void showCurrentLocation(View view){
-        Intent intent = new Intent(this, SecondActivity.class);
+
+    public void restartSession(View view) {
+        Intent intent = new Intent(this, FirstActivity.class);
 
         startActivity(intent);
     }
-
+    public void existSession(View view){
+        finish();
+    }
 
 }
+

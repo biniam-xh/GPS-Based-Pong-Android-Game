@@ -1,12 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".MainActivity">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/imageView"
+        android:id="@+id/backgroundImage"
         android:layout_alignParentStart="true"
         android:src="@drawable/bg1"
         android:layout_alignParentEnd="true"
@@ -17,31 +17,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="WELCOME TO "
-        android:id="@+id/textView"
+        android:text="THANK YOU FOR PLAYING "
+        android:id="@+id/thankyouText"
         android:layout_marginTop="143dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textColor="#ff050505"
-        android:textSize="40dp" />
+        android:textSize="25dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="GPS BASED PONG GAME"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
+        android:text="THIS GPS BASED PONG GAME"
+        android:id="@+id/thankyouText2"
+        android:layout_below="@+id/thankyouText"
         android:layout_centerHorizontal="true"
         android:textColor="#ff050505"
-        android:textSize="30dp" />
+        android:textSize="25dp" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="GET YOUR CURRENT LOCATION"
-        android:id="@+id/currentLocationButton"
-        android:layout_below="@+id/textView2"
+        android:text="START THE SESSION AGAIN"
+        android:id="@+id/startAgainButton"
+        android:layout_below="@+id/thankyouText2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
         android:layout_alignParentEnd="false"
@@ -51,5 +51,21 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
-        android:onClick="showCurrentLocation" />
+        android:onClick="restartSession" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="END THE SESSION"
+        android:id="@+id/endSessionButton"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:textStyle="bold"
+        android:background="#2196f3"
+        android:textColor="@android:color/white"
+        android:onClick="existSession"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp" />
 </RelativeLayout>
