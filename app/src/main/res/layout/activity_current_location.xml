@@ -27,5 +27,6 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="openThirdActivity" />
 </FrameLayout>

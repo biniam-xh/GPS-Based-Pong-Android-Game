@@ -1,6 +1,7 @@
 package com.biniam.android.gpsbasedpongandroidgame;
 
 import android.*;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,8 +27,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallback,
     GoogleApiClient.ConnectionCallbacks,
@@ -38,16 +43,35 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         //private GoogleMap mMap; // Might be null if Google Play services APK is not available.
         private GoogleMap mMap;
         GoogleApiClient mGoogleApiClient;
-        Location mLastLocation;
-        Marker mCurrLocationMarker;
-        LocationRequest mLocationRequest;
-
+        Location myLastLocation;
+        Marker currentLocationMarker;
+        LocationRequest myLocationRequest;
+        ArrayList rectangleCordinates;
+        Location upperLeft;
+        Location upperRight;
+        Location lowerRight;
+        Location lowerLeft;
+        Button upperLeftButton;
+        Button upperRightButton;
+        Button lowerRightButton;
+        Button lowerLeftButton;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_third);
+
+            upperLeftButton = (Button) findViewById(R.id.upperLeftButton);
+            upperRightButton = (Button) findViewById(R.id.upperRightButton);
+            lowerRightButton = (Button) findViewById(R.id.lowerRightButton);
+            lowerLeftButton = (Button) findViewById(R.id.lowerLeftButton);
+
+            upperLeftButton.setEnabled(true);
+            upperRightButton.setEnabled(false);
+            lowerRightButton.setEnabled(false);
+            lowerLeftButton.setEnabled(false);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -100,14 +124,14 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onConnected(Bundle bundle) {
 
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        myLocationRequest = new LocationRequest();
+        myLocationRequest.setInterval(1000);
+        myLocationRequest.setFastestInterval(1000);
+        myLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, myLocationRequest, this);
         }
 
     }
@@ -120,9 +144,9 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onLocationChanged(Location location) {
 
-        mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
+        myLastLocation = location;
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
         }
 
         //Place current location marker
@@ -131,7 +155,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
+        currentLocationMarker = mMap.addMarker(markerOptions);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -217,6 +241,69 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             // You can add here other case statements according to your requirement.
         }
     }
+        public void fixUpperLeftCorner(View view){
+            if(myLastLocation != null){
+               upperLeft = myLastLocation;
+
+               upperLeftButton.setEnabled(false);
+               upperRightButton.setEnabled(true);
+            }
+        }
+        public void fixUpperRightCorner(View view){
+            if(myLastLocation != null){
+                upperRight = myLastLocation;
+
+                upperRightButton.setEnabled(false);
+                lowerRightButton.setEnabled(true);
+            }
+        }
+        public void fixLowerRightCorner(View view){
+            if(myLastLocation != null){
+                lowerRight = myLastLocation;
+
+                lowerRightButton.setEnabled(false);
+                lowerLeftButton.setEnabled(true);
+            }
+        }
+        public void fixLowerLeftCorner(View view){
+            if(myLastLocation != null){
+                lowerLeft = myLastLocation;
+
+                lowerLeftButton.setEnabled(false);
+
+                Intent intent = new Intent(this, FourthActivity.class);
+
+                Double[] upperLeftLoc = {upperLeft.getLatitude(),upperLeft.getLongitude()};
+                Double[] upperRightLoc = {upperRight.getLatitude(),upperRight.getLongitude()};
+                Double[] lowerRightLoc = {lowerRight.getLatitude(),lowerRight.getLongitude()};
+                Double[] lowerLeftLoc = {lowerLeft.getLatitude(),lowerLeft.getLongitude()};
+
+                intent.putExtra("upperLeftLoc", upperLeftLoc );
+                intent.putExtra("upperRightLoc", upperRightLoc);
+                intent.putExtra("lowerRightLoc", lowerRightLoc);
+                intent.putExtra("lowerLeftLoc",lowerLeftLoc);
+
+                /////////
+                LatLng upperLeftLatLng = new LatLng(upperLeft.getLatitude(), upperLeft.getLongitude());
+                LatLng upperRightLatLng = new LatLng(upperRight.getLatitude(),upperRight.getLongitude());
+                LatLng lowerRightLatLng = new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude());
+                LatLng lowerLeftLatLng = new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude());
+
+                LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
+                        .include(upperLeftLatLng)
+                        .include(upperRightLatLng)
+                        .include(lowerRightLatLng)
+                        .include(lowerLeftLatLng);
+                LatLng centerLatLng = boundsBuilder.build().getCenter();
+                double[] center = {centerLatLng.latitude,centerLatLng.longitude};
+
+                intent.putExtra("center",center);
+
+                startActivity(intent);
+            }
+        }
+
+        
 }
 
 

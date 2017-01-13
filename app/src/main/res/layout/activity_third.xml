@@ -1,44 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.biniam.android.gpsbasedpongandroidgame.ThirdActivity">
 
-
-
     <fragment
         android:layout_width="match_parent"
-        android:layout_height="356dp" android:id="@+id/map"
+        android:id="@+id/map"
         tools:context="com.biniam.android.gpsbasedpongandroidgame.ThirdActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FIX THE LOWER LEFT CORNER OF THE PLAYGROUND"
-        android:id="@+id/lowerLeftButton"
-        android:layout_below="@+id/map"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentEnd="false"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:textStyle="bold"
-        android:background="#2196f3"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_height="390dp" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="360dp"
+        android:layout_height="30dp"
         android:text="FIX THE UPPER LEFT CORNER OF THE PLAYGROUND"
         android:id="@+id/upperLeftButton"
-        android:layout_below="@+id/lowerLeftButton"
+        android:layout_below="@+id/map"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:layout_alignParentEnd="false"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -46,16 +27,17 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="fixUpperLeftCorner" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="360dp"
+        android:layout_height="30dp"
         android:text="FIX THE UPPER RIGHT CORNER OF THE PLAYGROUND"
         android:id="@+id/upperRightButton"
         android:layout_below="@+id/upperLeftButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentEnd="false"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -63,16 +45,19 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="fixUpperRightCorner"
+        android:enabled="false" />
+
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="360dp"
+        android:layout_height="30dp"
         android:text="FIX THE LOWER RIGHT CORNER OF THE PLAYGROUND"
         android:id="@+id/lowerRightButton"
         android:layout_below="@+id/upperRightButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentEnd="false"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -80,5 +65,27 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
-        android:layout_gravity="center_horizontal|top" />
-</FrameLayout>
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="fixLowerRightCorner" />
+
+    <Button
+        android:layout_width="360dp"
+        android:layout_height="30dp"
+        android:text="FIX THE LOWER LEFT CORNER OF THE PLAYGROUND"
+        android:id="@+id/lowerLeftButton"
+        android:layout_below="@+id/lowerRightButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="false"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:textStyle="bold"
+        android:background="#2196f3"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="fixLowerLeftCorner" />
+
+
+
+</RelativeLayout>
