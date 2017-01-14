@@ -10,7 +10,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -38,6 +42,7 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
 
     @Override
@@ -48,11 +53,36 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
+        Button button = (Button) findViewById(R.id.setBackgroundButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                openThirdActivity();
+            }
+        });
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -68,7 +98,7 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -132,7 +162,7 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(20));
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -146,7 +176,7 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
 
     }
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     public boolean checkLocationPermission(){
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -197,6 +227,7 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
                             buildGoogleApiClient();
                         }
                         mMap.setMyLocationEnabled(true);
+
                     }
 
                 } else {
@@ -214,8 +245,9 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
             // You can add here other case statements according to your requirement.
         }
     }
-    public void openThirdActivity(View view){
+    public void openThirdActivity(){
         Intent intent = new Intent(this, ThirdActivity.class);
         startActivity(intent);
     }
+
 }

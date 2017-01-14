@@ -38,21 +38,22 @@
 
         <activity
             android:name=".SecondActivity"
-            android:label="@string/title_activity_maps"></activity>
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_maps" />
+        android:screenOrientation="portrait">
         <activity
             android:name=".FourthActivity"
-            android:label="@string/title_activity_fourth"></activity>
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_fourth" />
+        android:screenOrientation="portrait">
         <activity
             android:name=".FifthActivity"
-            android:label="@string/title_activity_fifth"></activity>
-            android:screenOrientation="portrait">
+            android:label="@string/title_activity_fifth" />
+        android:screenOrientation="portrait">
         <activity
             android:name=".ThirdActivity"
             android:label="@string/title_activity_third"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme.NoActionBar" />
+        android:screenOrientation="portrait">
+        <activity android:name=".SixthActivity"></activity>
     </application>
 
 </manifest>

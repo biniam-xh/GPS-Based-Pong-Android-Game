@@ -6,14 +6,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 
 public class FourthActivity extends ActionBarActivity {
-
+    Intent receivedIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fourth);
+        receivedIntent = getIntent();
+
     }
 
     @Override
@@ -40,10 +46,15 @@ public class FourthActivity extends ActionBarActivity {
     public void openSinglePlayerGame(View view){
         Intent intent = new Intent(this, FifthActivity.class);
         intent.putExtra("playerType",1);
+        //double[] upperLeftLoc = receivedIntent.getExtras().getDoubleArray("upperLeftLoc");
+        //String s = "sssssssssss"+ receivedIntent.getDoubleArrayExtra("upperLeftLoc")[0];
+        //Toast.makeText(this, "Ssssssssssa" , Toast.LENGTH_LONG).show();
+        intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         startActivity(intent);
     }
     public void openMultiPlayerGmae(View view){
         Intent intent = new Intent(this, FifthActivity.class);
+        intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         intent.putExtra("playerType",2);
         startActivity(intent);
     }

@@ -19,7 +19,7 @@
         android:id="@+id/upperLeftButton"
         android:layout_below="@+id/map"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:layout_alignParentEnd="false"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
@@ -85,6 +85,24 @@
         android:textColor="@android:color/white"
         android:layout_gravity="center_horizontal|top"
         android:onClick="fixLowerLeftCorner" />
+
+    <Button
+        android:layout_width="360dp"
+        android:layout_height="30dp"
+        android:text="NAVIGATE TO PONG GAM"
+        android:id="@+id/navigateButton"
+        android:layout_below="@+id/lowerLeftButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="false"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:textStyle="bold"
+        android:background="#2196f3"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="navigateToMap" />
 
 
 

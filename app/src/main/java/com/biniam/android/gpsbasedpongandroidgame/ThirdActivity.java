@@ -3,6 +3,7 @@ package com.biniam.android.gpsbasedpongandroidgame;
 import android.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
 
@@ -55,22 +57,30 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         Button upperRightButton;
         Button lowerRightButton;
         Button lowerLeftButton;
+        Marker newMarker;
+        Intent intent;
+        boolean allFixed = false;
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_third);
+            //sets the layout of the activity
+            setContentView(R.layout.activity_third);
 
             upperLeftButton = (Button) findViewById(R.id.upperLeftButton);
             upperRightButton = (Button) findViewById(R.id.upperRightButton);
             lowerRightButton = (Button) findViewById(R.id.lowerRightButton);
             lowerLeftButton = (Button) findViewById(R.id.lowerLeftButton);
 
+            //disable all the buttons except the firs one.
             upperLeftButton.setEnabled(true);
             upperRightButton.setEnabled(false);
             lowerRightButton.setEnabled(false);
             lowerLeftButton.setEnabled(false);
+
+            intent = new Intent(this, FourthActivity.class);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -95,6 +105,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -159,12 +170,12 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(20));
 
         //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
+        //if (mGoogleApiClient != null) {
+        //    LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        //}
 
     }
 
@@ -247,6 +258,9 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                upperLeftButton.setEnabled(false);
                upperRightButton.setEnabled(true);
+
+                setMarker(upperLeft);
+                upperLeftButton.setText("FIXED");
             }
         }
         public void fixUpperRightCorner(View view){
@@ -255,6 +269,9 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 upperRightButton.setEnabled(false);
                 lowerRightButton.setEnabled(true);
+
+                setMarker(upperRight);
+                upperRightButton.setText("FIXED");
             }
         }
         public void fixLowerRightCorner(View view){
@@ -263,6 +280,9 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 lowerRightButton.setEnabled(false);
                 lowerLeftButton.setEnabled(true);
+
+                setMarker(lowerRight);
+                lowerRightButton.setText("FIXED");
             }
         }
         public void fixLowerLeftCorner(View view){
@@ -271,36 +291,99 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 lowerLeftButton.setEnabled(false);
 
-                Intent intent = new Intent(this, FourthActivity.class);
+                lowerLeftButton.setText("FIXED");
 
-                Double[] upperLeftLoc = {upperLeft.getLatitude(),upperLeft.getLongitude()};
-                Double[] upperRightLoc = {upperRight.getLatitude(),upperRight.getLongitude()};
-                Double[] lowerRightLoc = {lowerRight.getLatitude(),lowerRight.getLongitude()};
-                Double[] lowerLeftLoc = {lowerLeft.getLatitude(),lowerLeft.getLongitude()};
 
-                intent.putExtra("upperLeftLoc", upperLeftLoc );
-                intent.putExtra("upperRightLoc", upperRightLoc);
-                intent.putExtra("lowerRightLoc", lowerRightLoc);
-                intent.putExtra("lowerLeftLoc",lowerLeftLoc);
+                //create perfect rectangle
+                if(upperLeft.getLongitude()< lowerLeft.getLongitude()){
+                    upperLeft.setLongitude(lowerLeft.getLongitude());
+                }
+                else{
+                    lowerLeft.setLongitude(upperLeft.getLongitude());
+                }
+                if(upperRight.getLongitude()<lowerRight.getLongitude()){
+                    upperRight.setLongitude(lowerRight.getLongitude());
+                }
+                else{
+                    lowerRight.setLongitude(upperRight.getLongitude());
+                }
+                if(upperLeft.getLatitude()<upperRight.getLatitude()){
+                    upperLeft.setLatitude(upperRight.getLatitude());
+                }
+                else{
+                    upperRight.setLatitude(upperLeft.getLatitude());
+                }
+                if(lowerLeft.getLatitude()<lowerRight.getLatitude()){
+                    lowerLeft.setLatitude(lowerRight.getLatitude());
+                }
+                else{
+                    lowerRight.setLatitude(lowerLeft.getLatitude());
+                }
+                //////////
 
-                /////////
-                LatLng upperLeftLatLng = new LatLng(upperLeft.getLatitude(), upperLeft.getLongitude());
-                LatLng upperRightLatLng = new LatLng(upperRight.getLatitude(),upperRight.getLongitude());
-                LatLng lowerRightLatLng = new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude());
-                LatLng lowerLeftLatLng = new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude());
+                double[] upperLeftLoc = {upperLeft.getLatitude(),upperLeft.getLongitude()};
+                double[] upperRightLoc = {upperRight.getLatitude(),upperRight.getLongitude()};
+                double[] lowerRightLoc = {lowerRight.getLatitude(),lowerRight.getLongitude()};
+                double[] lowerLeftLoc = {lowerLeft.getLatitude(),lowerLeft.getLongitude()};
 
+                Bundle b=new Bundle();
+
+                b.putDoubleArray("upperLeftLoc", upperLeftLoc );
+                b.putDoubleArray("upperRightLoc", upperRightLoc);
+                b.putDoubleArray("lowerRightLoc", lowerRightLoc);
+                b.putDoubleArray("lowerLeftLoc",lowerLeftLoc);
+
+                intent.putExtras(b);
+
+                setMarker(lowerLeft);
+
+                allFixed = true;
+                /////adding box
                 LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
-                        .include(upperLeftLatLng)
-                        .include(upperRightLatLng)
-                        .include(lowerRightLatLng)
-                        .include(lowerLeftLatLng);
-                LatLng centerLatLng = boundsBuilder.build().getCenter();
-                double[] center = {centerLatLng.latitude,centerLatLng.longitude};
+                        .include(new LatLng(upperLeft.getLatitude(),upperLeft.getLongitude()))
+                        .include(new LatLng(upperRight.getLatitude(),upperRight.getLongitude()))
+                        .include(new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude()))
+                        .include(new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude()));
 
-                intent.putExtra("center",center);
 
-                startActivity(intent);
+                // Move camera to show all markers and locations
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 10));
+
+                LatLng[] POLYGON = new LatLng[]{
+                        new LatLng(upperLeft.getLatitude(),upperLeft.getLongitude()),
+                        new LatLng(upperRight.getLatitude(),upperRight.getLongitude()),
+                        new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude()),
+                        new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude())
+
+                };
+                mMap.addPolygon(new PolygonOptions()
+                        .add(POLYGON)
+                        .strokeColor(Color.CYAN)
+                        .strokeWidth(5));
+                /////
+
+                Toast.makeText(this, "SUCCESSFULLY FIXED THE LOCATION COORDINATES FOR THE PLAYGROUND", Toast.LENGTH_LONG).show();
             }
+        }
+        public void navigateToMap(View view){
+            if(allFixed){
+                if(allFixed){
+                    allFixed = true;
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(this, "PLEASE FIX LOCATION COORDINATES FOR THE PLAYGROUND", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
+        public void setMarker(Location location){
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            //markerOptions.title("Current Position");
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            Marker newMarker = mMap.addMarker(markerOptions);
         }
 
         

@@ -11,12 +11,14 @@ import android.view.View;
 public class FifthActivity extends ActionBarActivity {
 
     int playerType;
+    Intent receivedIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fifth);
         playerType = getIntent().getExtras().getInt("playerType");
+        receivedIntent = getIntent();
     }
 
     @Override
@@ -41,21 +43,24 @@ public class FifthActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     public void selectAmateurMode(View view){
-        Intent intent = new Intent(this, FifthActivity.class);
+        Intent intent = new Intent(this, SixthActivity.class);
         intent.putExtra("mode",1);
         intent.putExtra("playerType", playerType);
+        intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         startActivity(intent);
     }
     public void selectProfessionalMode(View view){
-        Intent intent = new Intent(this, FifthActivity.class);
+        Intent intent = new Intent(this, SixthActivity.class);
         intent.putExtra("mode",2);
         intent.putExtra("playerType", playerType);
+        intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         startActivity(intent);
     }
     public void selectWorldClassMode(View view){
-        Intent intent = new Intent(this, FifthActivity.class);
+        Intent intent = new Intent(this, SixthActivity.class);
         intent.putExtra("mode",3);
         intent.putExtra("playerType", playerType);
+        intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         startActivity(intent);
     }
 }
