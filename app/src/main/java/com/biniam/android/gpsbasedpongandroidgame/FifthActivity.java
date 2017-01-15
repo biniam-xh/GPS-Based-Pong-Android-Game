@@ -97,9 +97,9 @@ public class FifthActivity extends ActionBarActivity {
         String code = securityCode.getText().toString();
         setContentView(R.layout.player1_notification);
         switcher = (ViewSwitcher) findViewById(R.id.ViewSwitcher2);
-        startScan();
+        startScan(code);
     }
-    public void startScan() {
+    public void startScan(String s) {
 
         new Thread() {
 
