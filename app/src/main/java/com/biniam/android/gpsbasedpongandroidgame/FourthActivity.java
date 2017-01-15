@@ -6,19 +6,24 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 
 public class FourthActivity extends ActionBarActivity {
-    Intent receivedIntent;
+    public Intent receivedIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fourth);
         receivedIntent = getIntent();
+
 
     }
 
@@ -64,4 +69,5 @@ public class FourthActivity extends ActionBarActivity {
         startActivity(intent);
 
     }
+
 }

@@ -77,8 +77,11 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             //disable all the buttons except the first one.
             upperLeftButton.setEnabled(true);
             upperRightButton.setEnabled(false);
+            upperRightButton.setTextColor(Color.GRAY);
             lowerRightButton.setEnabled(false);
+            lowerRightButton.setTextColor(Color.GRAY);
             lowerLeftButton.setEnabled(false);
+            lowerLeftButton.setTextColor(Color.GRAY);
 
             intent = new Intent(this, FourthActivity.class);
 
@@ -106,7 +109,8 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
+        mMap.getUiSettings().setTiltGesturesEnabled(false);
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -258,6 +262,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                upperLeftButton.setEnabled(false);
                upperRightButton.setEnabled(true);
+                upperRightButton.setTextColor(Color.WHITE);
 
                 setMarker(upperLeft);
                 upperLeftButton.setText("FIXED");
@@ -269,6 +274,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 upperRightButton.setEnabled(false);
                 lowerRightButton.setEnabled(true);
+                lowerRightButton.setTextColor(Color.WHITE);
 
                 setMarker(upperRight);
                 upperRightButton.setText("FIXED");
@@ -280,6 +286,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 lowerRightButton.setEnabled(false);
                 lowerLeftButton.setEnabled(true);
+                lowerLeftButton.setTextColor(Color.WHITE);
 
                 setMarker(lowerRight);
                 lowerRightButton.setText("FIXED");
@@ -341,6 +348,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 b.putDoubleArray("lowerRightLoc", lowerRightLoc);
                 b.putDoubleArray("lowerLeftLoc",lowerLeftLoc);
 
+
                 intent.putExtras(b);
 
                 allFixed = true;
@@ -353,7 +361,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                // boundsBuilder.build().
                 // Move camera to show all markers and locations
                 mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 10));
-
+                b.putDouble("zoomLevel", mMap.getCameraPosition().zoom);
                 //LatLngBounds curScreen = mMap.getProjection()
                  //       .getVisibleRegion().latLngBounds;
 /*
@@ -390,7 +398,6 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         }
         public void navigateToMap(View view){
-            if(allFixed){
                 if(allFixed){
                     allFixed = true;
                     startActivity(intent);
@@ -399,7 +406,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                     Toast.makeText(this, "PLEASE FIX LOCATION COORDINATES FOR THE PLAYGROUND", Toast.LENGTH_SHORT).show();
                 }
 
-            }
+
         }
         public void setMarker(Location location){
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());

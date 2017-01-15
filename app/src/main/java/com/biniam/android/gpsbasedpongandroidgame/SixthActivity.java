@@ -25,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -106,6 +107,7 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                     // Move camera to show all markers and locations
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 10));
 
+                    disableGestures();
                     LatLng[] POLYGON = new LatLng[]{
                             ADELAIDE,PERTH,BRISBANE,DARWIN
 
@@ -127,6 +129,9 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
         double[] upperRightLoc = b.getDoubleArray("upperRightLoc");
         double[] lowerRightLoc = b.getDoubleArray("lowerRightLoc");
         double[] lowerLeftLoc = b.getDoubleArray("lowerLeftLoc");
+        double zoomLevel = b.getDouble("zoomLevel");
+        int playerType = b.getInt("playerType");
+        int mode = b.getInt("mode");
 
         LatLng upperLeftLatLng = new LatLng(upperLeftLoc[0], upperLeftLoc[1]);
         LatLng upperRightLatLng = new LatLng(upperRightLoc[0],upperRightLoc[1]);
@@ -146,6 +151,9 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
 
        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(upperLeftLoc[0], upperLeftLoc[1]), 20));
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 0));
+
+        disableGestures();
+
 
         /*LatLng[] POLYGON = new LatLng[]{
                 upperLeftLatLng, upperRightLatLng,
@@ -195,6 +203,13 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                  //markerOptions.title("Current Position");
                  markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                  Marker newMarker = mMap.addMarker(markerOptions);
+             }
+             public void disableGestures(){
+                 mMap.getUiSettings().setMapToolbarEnabled(false);
+                 mMap.getUiSettings().setZoomGesturesEnabled(false);
+                 mMap.getUiSettings().setScrollGesturesEnabled(false);
+                 mMap.getUiSettings().setTiltGesturesEnabled(false);
+                 mMap.getUiSettings().setRotateGesturesEnabled(false);
              }
 
 

@@ -13,9 +13,9 @@
         android:layout_height="390dp" />
 
     <Button
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:text="FIX THE UPPER LEFT CORNER OF THE PLAYGROUND"
+        android:text=" FIX THE UPPER LEFT CORNER OF THE PLAYGROUND"
         android:id="@+id/upperLeftButton"
         android:layout_below="@+id/map"
         android:layout_centerHorizontal="true"
@@ -27,11 +27,12 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
+        android:textSize="12dp"
         android:layout_gravity="center_horizontal|top"
         android:onClick="fixUpperLeftCorner" />
 
     <Button
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="FIX THE UPPER RIGHT CORNER OF THE PLAYGROUND"
         android:id="@+id/upperRightButton"
@@ -45,13 +46,14 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
+        android:textSize="12dp"
         android:layout_gravity="center_horizontal|top"
         android:onClick="fixUpperRightCorner"
         android:enabled="false" />
 
 
     <Button
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="FIX THE LOWER RIGHT CORNER OF THE PLAYGROUND"
         android:id="@+id/lowerRightButton"
@@ -65,13 +67,14 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
+        android:textSize="12dp"
         android:layout_gravity="center_horizontal|top"
         android:onClick="fixLowerRightCorner" />
 
     <Button
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:text="FIX THE LOWER LEFT CORNER OF THE PLAYGROUND"
+        android:text=" FIX THE LOWER LEFT CORNER OF THE PLAYGROUND"
         android:id="@+id/lowerLeftButton"
         android:layout_below="@+id/lowerRightButton"
         android:layout_centerHorizontal="true"
@@ -83,13 +86,14 @@
         android:textStyle="bold"
         android:background="#2196f3"
         android:textColor="@android:color/white"
+        android:textSize="12dp"
         android:layout_gravity="center_horizontal|top"
         android:onClick="fixLowerLeftCorner" />
 
     <Button
-        android:layout_width="360dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:text="NAVIGATE TO PONG GAM"
+        android:text="NAVIGATE TO PONG GAME"
         android:id="@+id/navigateButton"
         android:layout_below="@+id/lowerLeftButton"
         android:layout_centerHorizontal="true"

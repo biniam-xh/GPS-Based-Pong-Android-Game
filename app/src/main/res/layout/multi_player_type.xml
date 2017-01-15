@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ViewSwitcher"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg1">
+
+    <RelativeLayout
+        android:background="@drawable/bg1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"  >
+
+        <TextView
+            android:text="Choose Player"
+            android:id="@+id/t1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:text="Player 1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/t1"
+            android:layout_marginTop="50dp"
+            android:layout_centerHorizontal="true"
+            android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textStyle="bold"
+            android:background="#2196f3"
+            android:textColor="@android:color/white"
+            android:id="@+id/player1"
+            android:onClick="player1Selected" />
+        <Button
+            android:text="Player 2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/player1"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textStyle="bold"
+            android:background="#2196f3"
+            android:textColor="@android:color/white"
+            android:id="@+id/player2"
+            android:onClick="player2Selected"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:background="@drawable/bg1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+
+        <TextView
+            android:text="ENTER A 4 DIGIT SECURITY CODE"
+            android:id="@+id/t2"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"
+            android:textColor="#000000"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberSigned"
+            android:layout_below="@+id/t2"
+            android:ems="10"
+            android:id="@+id/securityCode" />
+
+        <Button
+            android:text="Done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/securityCode"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:theme="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textStyle="bold"
+            android:background="#2196f3"
+            android:textColor="@android:color/white"
+            android:id="@+id/done"
+            android:onClick="setSecurityCode"/>
+
+    </RelativeLayout>
+
+
+
+
+</ViewSwitcher>

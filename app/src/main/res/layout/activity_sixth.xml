@@ -16,7 +16,8 @@
         android:id="@+id/map6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        map:mapType="normal"
+        map:mapType="satellite"
+
         />
 
 </RelativeLayout>
