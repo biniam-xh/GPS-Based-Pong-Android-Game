@@ -38,12 +38,12 @@
 
 
         <TextView
-            android:text="Success Text"
+            android:text="Unable to connect with the server."
             android:id="@+id/succesText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="20dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginTop="200dp"
             android:textColor="#FFFFFF"
             android:layout_centerHorizontal="true"
            />

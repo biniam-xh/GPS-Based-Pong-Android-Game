@@ -14,7 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -60,6 +62,8 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         Marker newMarker;
         Intent intent;
         boolean allFixed = false;
+        SupportMapFragment mapFragment;
+        int buttonColor;
 
 
         @Override
@@ -75,13 +79,19 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             lowerLeftButton = (Button) findViewById(R.id.lowerLeftButton);
 
             //disable all the buttons except the first one.
+
             upperLeftButton.setEnabled(true);
             upperRightButton.setEnabled(false);
-            upperRightButton.setTextColor(Color.GRAY);
+            //upperRightButton.setTextColor(Color.GRAY);
+            upperRightButton.setBackgroundColor(Color.TRANSPARENT);
             lowerRightButton.setEnabled(false);
-            lowerRightButton.setTextColor(Color.GRAY);
+            //lowerRightButton.setTextColor(Color.GRAY);
+            lowerRightButton.setBackgroundColor(Color.TRANSPARENT);
             lowerLeftButton.setEnabled(false);
-            lowerLeftButton.setTextColor(Color.GRAY);
+            //lowerLeftButton.setTextColor(Color.GRAY);
+            lowerLeftButton.setBackgroundColor(Color.TRANSPARENT);
+
+
 
             intent = new Intent(this, FourthActivity.class);
 
@@ -89,7 +99,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             checkLocationPermission();
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -262,7 +272,9 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                upperLeftButton.setEnabled(false);
                upperRightButton.setEnabled(true);
-                upperRightButton.setTextColor(Color.WHITE);
+                upperRightButton.setBackgroundColor(Color.parseColor("#428bca"));
+                upperLeftButton.setBackgroundColor(Color.TRANSPARENT);
+
 
                 setMarker(upperLeft);
                 upperLeftButton.setText("FIXED");
@@ -274,7 +286,8 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 upperRightButton.setEnabled(false);
                 lowerRightButton.setEnabled(true);
-                lowerRightButton.setTextColor(Color.WHITE);
+                lowerRightButton.setBackgroundColor(Color.parseColor("#428bca"));
+                upperRightButton.setBackgroundColor(Color.TRANSPARENT);
 
                 setMarker(upperRight);
                 upperRightButton.setText("FIXED");
@@ -286,7 +299,8 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 lowerRightButton.setEnabled(false);
                 lowerLeftButton.setEnabled(true);
-                lowerLeftButton.setTextColor(Color.WHITE);
+                lowerLeftButton.setBackgroundColor(Color.parseColor("#428bca"));
+                lowerRightButton.setBackgroundColor(Color.TRANSPARENT);
 
                 setMarker(lowerRight);
                 lowerRightButton.setText("FIXED");
@@ -297,49 +311,43 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 lowerLeft = myLastLocation;
 
                 lowerLeftButton.setEnabled(false);
+                lowerLeftButton.setBackgroundColor(Color.TRANSPARENT);
 
                 lowerLeftButton.setText("FIXED");
 
                 setMarker(lowerLeft);
+
+            upperLeftButton.setVisibility(View.GONE);
+            upperRightButton.setVisibility(View.GONE);
+            lowerRightButton.setVisibility(View.GONE);
+            lowerLeftButton.setVisibility(View.GONE);
+
+
+                allFixed = true;
+                /////adding box
+                LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
+                        .include(new LatLng(upperLeft.getLatitude(),upperLeft.getLongitude()))
+                        .include(new LatLng(upperRight.getLatitude(),upperRight.getLongitude()))
+                        .include(new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude()))
+                        .include(new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude()));
+
+
+                // Move camera to show all markers and locations
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 10));
+
+
+                LatLngBounds curScreen = mMap.getProjection()
+                        .getVisibleRegion().latLngBounds;
 
             if(myLastLocation != null){
                 if (mGoogleApiClient != null) {
                     LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
                 }
 
-
-                //create perfect rectangle
-                if(upperLeft.getLongitude()< lowerLeft.getLongitude()){
-                    upperLeft.setLongitude(lowerLeft.getLongitude());
-                }
-                else{
-                    lowerLeft.setLongitude(upperLeft.getLongitude());
-                }
-                if(upperRight.getLongitude()<lowerRight.getLongitude()){
-                    upperRight.setLongitude(lowerRight.getLongitude());
-                }
-                else{
-                    lowerRight.setLongitude(upperRight.getLongitude());
-                }
-                if(upperLeft.getLatitude()<upperRight.getLatitude()){
-                    upperLeft.setLatitude(upperRight.getLatitude());
-                }
-                else{
-                    upperRight.setLatitude(upperLeft.getLatitude());
-                }
-                if(lowerLeft.getLatitude()<lowerRight.getLatitude()){
-                    lowerLeft.setLatitude(lowerRight.getLatitude());
-                }
-                else{
-                    lowerRight.setLatitude(lowerLeft.getLatitude());
-                }
-                 /////////
-
-
-                double[] upperLeftLoc = {upperLeft.getLatitude(),upperLeft.getLongitude()};
-                double[] upperRightLoc = {upperRight.getLatitude(),upperRight.getLongitude()};
-                double[] lowerRightLoc = {lowerRight.getLatitude(),lowerRight.getLongitude()};
-                double[] lowerLeftLoc = {lowerLeft.getLatitude(),lowerLeft.getLongitude()};
+                double[] upperLeftLoc = {curScreen.northeast.latitude,curScreen.southwest.longitude};
+                double[] upperRightLoc = {curScreen.northeast.latitude,curScreen.northeast.longitude};
+                double[] lowerRightLoc = {curScreen.southwest.latitude,curScreen.northeast.longitude};
+                double[] lowerLeftLoc = {curScreen.southwest.latitude,curScreen.southwest.longitude};
 
                 Bundle b=new Bundle();
 
@@ -351,40 +359,13 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 intent.putExtras(b);
 
-                allFixed = true;
-                /////adding box
-                LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
-                        .include(new LatLng(upperLeft.getLatitude(),upperLeft.getLongitude()))
-                        .include(new LatLng(upperRight.getLatitude(),upperRight.getLongitude()))
-                        .include(new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude()))
-                        .include(new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude()));
-               // boundsBuilder.build().
-                // Move camera to show all markers and locations
-                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 10));
                 b.putDouble("zoomLevel", mMap.getCameraPosition().zoom);
-                //LatLngBounds curScreen = mMap.getProjection()
-                 //       .getVisibleRegion().latLngBounds;
-/*
-                double lowestLat = 0;
-                double lowestLong = 0;
-                double highestLat = 0;
-                double highestLong = 0;
-
-                double [] lats = {upperLeft.getLatitude(),upperRight.getLatitude(),lowerRight.getLatitude(),lowerLeft.getLatitude()};
-                lowestLat = getHighest_Lowest(lats)[0];
-                highestLat = getHighest_Lowest(lats)[1];
-
-                double [] longs = {upperLeft.getLongitude(),upperRight.getLongitude(),lowerRight.getLongitude(),lowerLeft.getLongitude()};
-                lowestLong = getHighest_Lowest(longs)[0];
-                highestLong = getHighest_Lowest(longs)[1];
-*/
-
 
                 LatLng[] POLYGON = new LatLng[]{
-                        new LatLng(upperLeft.getLatitude(),upperLeft.getLongitude()),
-                        new LatLng(upperRight.getLatitude(),upperRight.getLongitude()),
-                        new LatLng(lowerRight.getLatitude(),lowerRight.getLongitude()),
-                        new LatLng(lowerLeft.getLatitude(),lowerLeft.getLongitude())
+                        new LatLng(curScreen.northeast.latitude,curScreen.southwest.longitude),
+                        curScreen.northeast,
+                        new LatLng(curScreen.southwest.latitude,curScreen.northeast.longitude),
+                        curScreen.southwest
 
                 };
 
@@ -404,8 +385,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 }
                 else{
                     Toast.makeText(this, "PLEASE FIX LOCATION COORDINATES FOR THE PLAYGROUND", Toast.LENGTH_SHORT).show();
-                }
-
+               }
 
         }
         public void setMarker(Location location){
@@ -431,6 +411,9 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             }
             double[] result = {lowest,highest};
             return result;
+        }
+        public void removeButtons(){
+
         }
 
         

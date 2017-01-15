@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 
@@ -19,12 +20,14 @@ public class FifthActivity extends ActionBarActivity {
     public int playerType;
     public Intent receivedIntent;
     public ViewSwitcher switcher;
-    public ViewSwitcher switcher2;
+    public ViewSwitcher switcher3;
     public Button player1;
     public Button player2;
     public EditText securityCode;
     public Button done;
     private static final int REFRESH_SCREEN = 1;
+    public Button ok;
+    public EditText securityCode2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +36,7 @@ public class FifthActivity extends ActionBarActivity {
         playerType = getIntent().getExtras().getInt("playerType");
         receivedIntent = getIntent();
 
-        switcher = (ViewSwitcher) findViewById(R.id.ViewSwitcher);
 
-
-        player1 = (Button) findViewById(R.id.player1);
-        player2 = (Button) findViewById(R.id.player2);
-        securityCode = (EditText) findViewById(R.id.securityCode);
-        done = (Button) findViewById(R.id.done);
     }
 
     @Override
@@ -68,21 +65,43 @@ public class FifthActivity extends ActionBarActivity {
         intent.putExtra("mode",1);
         intent.putExtra("playerType", playerType);
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
-        startActivity(intent);
+        Bundle b = getIntent().getExtras();
+        int type = b.getInt("playerType");
+        if(type == 2){
+            multiPlayerSelected();
+        }
+        else{
+            startActivity(intent);
+        }
+
     }
     public void selectProfessionalMode(View view){
         Intent intent = new Intent(this, SixthActivity.class);
         intent.putExtra("mode",2);
         intent.putExtra("playerType", playerType);
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
-        startActivity(intent);
+        Bundle b = getIntent().getExtras();
+        int type = b.getInt("playerType");
+        if(type == 2){
+            multiPlayerSelected();
+        }
+        else{
+            startActivity(intent);
+        }
     }
     public void selectWorldClassMode(View view){
         Intent intent = new Intent(this, SixthActivity.class);
         intent.putExtra("mode",3);
         intent.putExtra("playerType", playerType);
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
-        startActivity(intent);
+        Bundle b = getIntent().getExtras();
+        int type = b.getInt("playerType");
+        if(type == 2){
+            multiPlayerSelected();
+        }
+        else{
+            startActivity(intent);
+        }
     }
     public void player1Selected(View view){
         new AnimationUtils();
@@ -97,9 +116,9 @@ public class FifthActivity extends ActionBarActivity {
         String code = securityCode.getText().toString();
         setContentView(R.layout.player1_notification);
         switcher = (ViewSwitcher) findViewById(R.id.ViewSwitcher2);
-        startScan(code);
+        startScan(code, switcher);
     }
-    public void startScan(String s) {
+    public void startScan(String s, ViewSwitcher switcher) {
 
         new Thread() {
 
@@ -132,5 +151,23 @@ public class FifthActivity extends ActionBarActivity {
             }
         }
     };
+    public void multiPlayerSelected(){
+        setContentView(R.layout.multi_player_type);
+        switcher = (ViewSwitcher) findViewById(R.id.ViewSwitcher);
+
+
+        player1 = (Button) findViewById(R.id.player1);
+        player2 = (Button) findViewById(R.id.player2);
+        securityCode = (EditText) findViewById(R.id.securityCode);
+        done = (Button) findViewById(R.id.done);
+    }
+    public void confirmCode(View view){
+        setContentView(R.layout.player2_security_check);
+        securityCode2 = (EditText) findViewById(R.id.securityCode2);
+        ok = (Button) findViewById(R.id.ok);
+        String code = securityCode2.getText().toString();
+        switcher3 = (ViewSwitcher) findViewById(R.id.ViewSwitcher3);
+        switcher3.showNext();
+    }
 
 }

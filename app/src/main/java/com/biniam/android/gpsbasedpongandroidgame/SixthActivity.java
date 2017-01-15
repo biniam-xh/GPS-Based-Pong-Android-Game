@@ -2,8 +2,10 @@ package com.biniam.android.gpsbasedpongandroidgame;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -33,27 +35,26 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+
 public class SixthActivity extends AppCompatActivity implements OnMapReadyCallback
          {
 
-    private GoogleMap mMap;
-    GoogleApiClient mGoogleApiClient;
-    Intent receivedIntent;
+    public GoogleMap mMap;
+    public Intent receivedIntent;
+    public Intent intent;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-             private static final LatLng BRISBANE = new LatLng(8, 4);
-
-             private static final LatLng ADELAIDE = new LatLng(1, 1);
-
-             private static final LatLng PERTH = new LatLng(1, 4);
-
-             private static final LatLng DARWIN = new LatLng(8, 1);
+             Context c ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sixth);
 
+        c = getApplicationContext();
         receivedIntent = getIntent();
+        intent = new Intent(this,SeventhActivity.class);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -90,33 +91,9 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                     } else {
                         mapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
-                    LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
-                            .include(PERTH)
-                            .include(ADELAIDE)
-                            .include(DARWIN)
-                            .include(BRISBANE);
+                    showMap();
+                    takeSnapshot();
 
-                    setMarker(PERTH);
-                    setMarker(ADELAIDE);
-                    setMarker(DARWIN);
-                    setMarker(BRISBANE);
-                    LatLngBounds test = new LatLngBounds(ADELAIDE,BRISBANE);
-
-                    //mMap.setLatLngBoundsForCameraTarget(test);
-
-                    // Move camera to show all markers and locations
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 10));
-
-                    disableGestures();
-                    LatLng[] POLYGON = new LatLng[]{
-                            ADELAIDE,PERTH,BRISBANE,DARWIN
-
-                    };
-                    mMap.addPolygon(new PolygonOptions()
-                            .add(POLYGON)
-
-                            .strokeColor(Color.RED)
-                            .strokeWidth(5));
                 }
             });
         }
@@ -137,8 +114,7 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
         LatLng upperRightLatLng = new LatLng(upperRightLoc[0],upperRightLoc[1]);
         LatLng lowerRightLatLng = new LatLng(lowerRightLoc[0],lowerRightLoc[1]);
         LatLng lowerLeftLatLng = new LatLng(lowerLeftLoc[0],lowerLeftLoc[1]);
-        String s = "sssssssssss"+ upperLeftLoc[0];
-        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+
 
         LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
                 .include(upperLeftLatLng)
@@ -154,16 +130,6 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
 
         disableGestures();
 
-
-        /*LatLng[] POLYGON = new LatLng[]{
-                upperLeftLatLng, upperRightLatLng,
-                lowerRightLatLng, lowerLeftLatLng};
-
-        mMap.addPolygon(new PolygonOptions()
-                .add(POLYGON)
-                .fillColor(Color.CYAN)
-                .strokeColor(Color.BLUE)
-                .strokeWidth(5));*/
 
     }
     public boolean checkLocationPermission(){
@@ -196,14 +162,6 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
             return true;
         }
     }
-             public void setMarker(LatLng latLng){
-                 //LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                 MarkerOptions markerOptions = new MarkerOptions();
-                 markerOptions.position(latLng);
-                 //markerOptions.title("Current Position");
-                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                 Marker newMarker = mMap.addMarker(markerOptions);
-             }
              public void disableGestures(){
                  mMap.getUiSettings().setMapToolbarEnabled(false);
                  mMap.getUiSettings().setZoomGesturesEnabled(false);
@@ -212,5 +170,51 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                  mMap.getUiSettings().setRotateGesturesEnabled(false);
              }
 
+             private void takeSnapshot() {
+                 //Toast.makeText(c, "1", Toast.LENGTH_LONG).show();
+                 if (mMap == null) {
+                     return;
+                 }
+
+                 final GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
+
+                     @Override
+                     public void onSnapshotReady(Bitmap snapshot) {
+                         // Callback is called from the main thread, so we can modify the ImageView safely.
+
+                         Toast.makeText(c, "1", Toast.LENGTH_LONG).show();
+                         intent.putExtra("bitmap",createImageFromBitmap(snapshot));
+                         Toast.makeText(c, "2", Toast.LENGTH_LONG).show();
+                         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
+                         startActivity(intent);
+
+                     }
+                 };
+
+                 mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+
+                         @Override
+                         public void onMapLoaded() {
+                             mMap.snapshot(callback);
+                         }
+                     });
+                 mMap.snapshot(callback);
+
+             }
+             public String createImageFromBitmap(Bitmap bitmap) {
+                 String fileName = "myImage";//no .png or .jpg needed
+                 try {
+                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                     FileOutputStream fo = openFileOutput(fileName, Context.MODE_PRIVATE);
+                     fo.write(bytes.toByteArray());
+                     // remember close file output
+                     fo.close();
+                 } catch (Exception e) {
+                     e.printStackTrace();
+                     fileName = null;
+                 }
+                 return fileName;
+             }
 
 }

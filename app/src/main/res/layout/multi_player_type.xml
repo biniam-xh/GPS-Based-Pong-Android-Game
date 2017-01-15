@@ -71,7 +71,9 @@
             android:inputType="numberSigned"
             android:layout_below="@+id/t2"
             android:ems="10"
-            android:id="@+id/securityCode" />
+            android:id="@+id/securityCode"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"/>
 
         <Button
             android:text="Done"
