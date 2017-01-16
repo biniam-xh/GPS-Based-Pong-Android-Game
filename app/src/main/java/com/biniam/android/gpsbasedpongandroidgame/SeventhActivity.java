@@ -44,7 +44,10 @@ public class SeventhActivity extends ActionBarActivity {
         startActivity(intent);
     }
     public void existSession(View view){
-        finish();
+        Intent intent = new Intent(this, FirstActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        this.startActivity(intent);
     }
 
 }

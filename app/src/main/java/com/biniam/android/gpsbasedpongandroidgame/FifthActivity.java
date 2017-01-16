@@ -61,12 +61,14 @@ public class FifthActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     public void selectAmateurMode(View view){
-        Intent intent = new Intent(this, SixthActivity.class);
+        Intent intent = new Intent(this, AndrongActivity.class);
         intent.putExtra("mode",1);
         intent.putExtra("playerType", playerType);
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         Bundle b = getIntent().getExtras();
         int type = b.getInt("playerType");
+        VelocityGenerator.MinimumXSpeed = 50;
+        VelocityGenerator.MinimumYSpeed = 50;
         if(type == 2){
             multiPlayerSelected();
         }
@@ -76,12 +78,14 @@ public class FifthActivity extends ActionBarActivity {
 
     }
     public void selectProfessionalMode(View view){
-        Intent intent = new Intent(this, SixthActivity.class);
+        Intent intent = new Intent(this, AndrongActivity.class);
         intent.putExtra("mode",2);
         intent.putExtra("playerType", playerType);
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         Bundle b = getIntent().getExtras();
         int type = b.getInt("playerType");
+        VelocityGenerator.MinimumXSpeed = 300;
+        VelocityGenerator.MinimumYSpeed = 300;
         if(type == 2){
             multiPlayerSelected();
         }
@@ -90,12 +94,14 @@ public class FifthActivity extends ActionBarActivity {
         }
     }
     public void selectWorldClassMode(View view){
-        Intent intent = new Intent(this, SixthActivity.class);
+        Intent intent = new Intent(this, AndrongActivity.class);
         intent.putExtra("mode",3);
         intent.putExtra("playerType", playerType);
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         Bundle b = getIntent().getExtras();
         int type = b.getInt("playerType");
+        VelocityGenerator.MinimumXSpeed = 500;
+        VelocityGenerator.MinimumYSpeed = 500;
         if(type == 2){
             multiPlayerSelected();
         }

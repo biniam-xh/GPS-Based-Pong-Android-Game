@@ -38,7 +38,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 
-public class SixthActivity extends AppCompatActivity implements OnMapReadyCallback
+public class SixthActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback
          {
 
     public GoogleMap mMap;
@@ -54,7 +54,7 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
 
         c = getApplicationContext();
         receivedIntent = getIntent();
-        intent = new Intent(this,SeventhActivity.class);
+        intent = new Intent(this,AndrongActivity.class);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -77,8 +77,8 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMapLoadedCallback(this);
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
         final View mapView = getSupportFragmentManager().findFragmentById(R.id.map6).getView();
         if (mapView.getViewTreeObserver().isAlive()) {
             mapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -91,8 +91,8 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                     } else {
                         mapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
-                    showMap();
-                    takeSnapshot();
+
+                    //takeSnapshot();
 
                 }
             });
@@ -129,6 +129,8 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 0));
 
         disableGestures();
+
+
 
 
     }
@@ -170,11 +172,7 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                  mMap.getUiSettings().setRotateGesturesEnabled(false);
              }
 
-             private void takeSnapshot() {
-                 //Toast.makeText(c, "1", Toast.LENGTH_LONG).show();
-                 if (mMap == null) {
-                     return;
-                 }
+
 
                  final GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
 
@@ -182,25 +180,17 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                      public void onSnapshotReady(Bitmap snapshot) {
                          // Callback is called from the main thread, so we can modify the ImageView safely.
 
-                         Toast.makeText(c, "1", Toast.LENGTH_LONG).show();
-                         intent.putExtra("bitmap",createImageFromBitmap(snapshot));
-                         Toast.makeText(c, "2", Toast.LENGTH_LONG).show();
+                         //intent.putExtra("bitmap",createImageFromBitmap(snapshot));
                          intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
                          startActivity(intent);
 
                      }
                  };
 
-                 mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 
-                         @Override
-                         public void onMapLoaded() {
-                             mMap.snapshot(callback);
-                         }
-                     });
-                 mMap.snapshot(callback);
+                 //mMap.snapshot(callback);
 
-             }
+
              public String createImageFromBitmap(Bitmap bitmap) {
                  String fileName = "myImage";//no .png or .jpg needed
                  try {
@@ -217,4 +207,13 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
                  return fileName;
              }
 
-}
+
+             @Override
+             public void onMapLoaded() {
+                 //Toast.makeText(c,"hey",Toast.LENGTH_LONG).show();
+                 showMap();
+                 mMap.snapshot(callback);
+             }
+
+
+         }

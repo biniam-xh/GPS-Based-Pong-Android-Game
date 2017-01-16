@@ -1,8 +1,10 @@
 package com.biniam.android.gpsbasedpongandroidgame;
 
 import android.*;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
@@ -26,6 +28,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -35,12 +38,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallback,
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener,
-    LocationListener
+    LocationListener, OnMapLoadedCallback
 
     {
 
@@ -64,6 +69,10 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         boolean allFixed = false;
         SupportMapFragment mapFragment;
         int buttonColor;
+        public Marker upperLeftMarker;
+        public Marker upperRightMarker;
+        public Marker lowerRightMarker;
+        public Marker lowerLeftMarker;
 
 
         @Override
@@ -118,6 +127,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            mMap.setOnMapLoadedCallback(this);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setTiltGesturesEnabled(false);
         mMap.getUiSettings().setRotateGesturesEnabled(false);
@@ -266,6 +276,18 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
             // You can add here other case statements according to your requirement.
         }
     }
+        final GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
+
+            @Override
+            public void onSnapshotReady(Bitmap snapshot) {
+                // Callback is called from the main thread, so we can modify the ImageView safely.
+
+                intent.putExtra("bitmap",createImageFromBitmap(snapshot));
+                //intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
+                //startActivity(intent);
+
+            }
+        };
         public void fixUpperLeftCorner(View view){
             if(myLastLocation != null){
                upperLeft = myLastLocation;
@@ -276,7 +298,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 upperLeftButton.setBackgroundColor(Color.TRANSPARENT);
 
 
-                setMarker(upperLeft);
+                setMarker(upperLeft,1);
                 upperLeftButton.setText("FIXED");
             }
         }
@@ -289,7 +311,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 lowerRightButton.setBackgroundColor(Color.parseColor("#428bca"));
                 upperRightButton.setBackgroundColor(Color.TRANSPARENT);
 
-                setMarker(upperRight);
+                setMarker(upperRight,2);
                 upperRightButton.setText("FIXED");
             }
         }
@@ -302,7 +324,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 lowerLeftButton.setBackgroundColor(Color.parseColor("#428bca"));
                 lowerRightButton.setBackgroundColor(Color.TRANSPARENT);
 
-                setMarker(lowerRight);
+                setMarker(lowerRight,3);
                 lowerRightButton.setText("FIXED");
             }
         }
@@ -315,7 +337,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
                 lowerLeftButton.setText("FIXED");
 
-                setMarker(lowerLeft);
+                setMarker(lowerLeft,4);
 
             upperLeftButton.setVisibility(View.GONE);
             upperRightButton.setVisibility(View.GONE);
@@ -381,6 +403,14 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         public void navigateToMap(View view){
                 if(allFixed){
                     allFixed = true;
+
+                    currentLocationMarker.remove();
+                    upperLeftMarker.remove();
+                    upperRightMarker.remove();
+                    lowerRightMarker.remove();
+                    lowerLeftMarker.remove();
+
+                    mMap.snapshot(callback);
                     startActivity(intent);
                 }
                 else{
@@ -388,13 +418,25 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                }
 
         }
-        public void setMarker(Location location){
+        public void setMarker(Location location, int id){
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             //markerOptions.title("Current Position");
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            Marker newMarker = mMap.addMarker(markerOptions);
+            if(id==1){
+                upperLeftMarker = mMap.addMarker(markerOptions);
+            }
+            if(id==2){
+                upperRightMarker = mMap.addMarker(markerOptions);
+            }
+            if(id==3){
+                lowerRightMarker = mMap.addMarker(markerOptions);
+            }
+            if(id==4){
+                lowerLeftMarker = mMap.addMarker(markerOptions);
+            }
+
         }
         public double[] getHighest_Lowest(double[] x){
             double highest = x[0];
@@ -416,7 +458,31 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
 
         }
 
-        
-}
+
+
+        //mMap.snapshot(callback);
+
+
+        public String createImageFromBitmap(Bitmap bitmap) {
+            String fileName = "myImage";//no .png or .jpg needed
+            try {
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                FileOutputStream fo = openFileOutput(fileName, Context.MODE_PRIVATE);
+                fo.write(bytes.toByteArray());
+                // remember close file output
+                fo.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                fileName = null;
+            }
+            return fileName;
+        }
+
+        @Override
+        public void onMapLoaded() {
+
+        }
+    }
 
 

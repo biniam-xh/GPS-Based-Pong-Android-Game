@@ -34,7 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class SecondActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, GoogleMap.OnMapLoadedCallback {
 
     //private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private GoogleMap mMap;
@@ -99,6 +99,7 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        mMap.setOnMapLoadedCallback(this);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -250,4 +251,8 @@ public class SecondActivity extends FragmentActivity implements OnMapReadyCallba
         startActivity(intent);
     }
 
+    @Override
+    public void onMapLoaded() {
+        //Toast.makeText(getApplicationContext(),"hey",Toast.LENGTH_LONG).show();
+    }
 }

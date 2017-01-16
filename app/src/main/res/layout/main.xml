@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.biniam.android.gpsbasedpongandroidgame.AndrongSurfaceView
+      android:id="@+id/androng"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:text="Lives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="157dp"
+            android:id="@+id/lives"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:text="Speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lives"
+            android:layout_alignLeft="@+id/lives"
+            android:layout_alignStart="@+id/lives"
+            android:layout_marginTop="42dp"
+            android:id="@+id/speed"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:text="Score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/speed"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="57dp"
+            android:textSize="20dp"
+            android:id="@+id/socre" />
+
+        <LinearLayout
+            android:id="@+id/finalScene"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible">
+
+
+
+            <TextView
+                android:text="Congradulation You Won"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/finalScore"
+                android:gravity="center"
+                android:layout_marginTop="50dp"/>
+
+            <Button
+                android:text="Play Again"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/Retry"
+                android:layout_gravity="center"
+                android:layout_marginTop="70dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>
