@@ -1,16 +1,24 @@
 package com.biniam.android.gpsbasedpongandroidgame;
 
+
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 
+import java.util.ArrayList;
+
+
 public class FirstActivity extends AppCompatActivity {
 
+    private ArrayList<String> arrayList;
+    SettingDialogFragment settingDialog;
 
 
     @Override
@@ -19,8 +27,17 @@ public class FirstActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("EXIT", false)) {
             finish();
         }
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+        arrayList = new ArrayList<String>();
+
+
+        // connect to the server
+        //conctTask = new connectTask();
+        //conctTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,7 +53,10 @@ public class FirstActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            settingDialog = new SettingDialogFragment();
+            settingDialog.show(getFragmentManager(),"settings");
+
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -46,6 +66,8 @@ public class FirstActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
+
 
 
 }

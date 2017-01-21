@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 
+
 public class AndrongThread extends Thread
 {
    private final SurfaceHolder surfaceHolder;
@@ -59,12 +60,12 @@ public class AndrongThread extends Thread
 
       battBottom = new Sprite(battCollection, canvasWidth, canvasHeight, 0, false);
       battTop = new Sprite(battCollection, canvasWidth, canvasHeight, 0, false);
-      try {
-         backgroundImage = BitmapFactory.decodeStream(c.openFileInput("myImage"));
-      } catch (FileNotFoundException e) {
-         e.printStackTrace();
-      }
-      //backgroundImage = BitmapFactory.decodeResource(resources, R.drawable.background2);
+//      try {
+//         backgroundImage = BitmapFactory.decodeStream(c.openFileInput("myImage"));
+//      } catch (FileNotFoundException e) {
+//         e.printStackTrace();
+//      }
+      backgroundImage = Constants.bitmap;
       SetInitialBattPosition();
 
       score = new Score(3);
@@ -95,9 +96,9 @@ public class AndrongThread extends Thread
    private void SetInitialBattPosition()
    {
       battBottom.centerHorizontal();
-      battBottom.setyPosition(canvasHeight +90 - (canvasHeight / 100 * 20));
+      battBottom.setyPosition(canvasHeight -100);
       battTop.centerHorizontal();
-      battTop.setyPosition((canvasHeight / 100) * 5);
+      battTop.setyPosition((50 ));
    }
 
    @Override
@@ -117,7 +118,7 @@ public class AndrongThread extends Thread
             synchronized (surfaceHolder)
             {
                if ((currentState == STATE_RUNNING_1P || currentState == STATE_RUNNING_0P ||
-                    currentState == STATE_RUNNING_2P) && delayTime <= 0)
+                       currentState == STATE_RUNNING_2P) && delayTime <= 0)
                {
                   CheckCollision();
                   CheckBallBounds();
@@ -251,7 +252,7 @@ public class AndrongThread extends Thread
       AddToastToQueue(score.CreateWinnerBoard());
       //AddToastToQueue("Select Menu for a new game.");
       ResetGame();
-      isRunning = false;
+      //isRunning = false;
    }
 
    private void AdvanceBall(double frameTime)
@@ -379,9 +380,24 @@ public class AndrongThread extends Thread
       resumeGame();
    }
    public int getValue(int x){
-      int y = canvasWidth/2 -77  - (x  * 35);
+      int y = canvasWidth/2 - 117/2  - (x  * (canvasWidth/2)/8);
 
       return y;
+   }
+   public synchronized void setOpp(float x){
+      int battXPos = (int) x;
+      //battXPos = getValue(battXPos);
+      if(battXPos <= 0){
+         battXPos = 0;
+      }
+      battTop.setxPosition(battXPos);
+      if (battTop.IsMaximumRight(canvasWidth))
+         battTop.SetMaximumRight(canvasWidth);
+
+
+   }
+   public synchronized double getXValue(){
+      return battBottom.getxPosition();
    }
 
 
@@ -389,30 +405,32 @@ public class AndrongThread extends Thread
    {
       if (currentState == STATE_RUNNING_1P || currentState == STATE_RUNNING_2P)
       {
-         if (currentState == STATE_RUNNING_1P)
-         {
-            int battXPos = (int) xPosition1;
-             battXPos = getValue(battXPos);
-             if(battXPos <= 0){
-                battXPos = 0;
-             }
-            battBottom.setxPosition(battXPos);
-          if (battBottom.IsMaximumRight(canvasWidth))
-               battBottom.SetMaximumRight(canvasWidth);
+//         if (currentState == STATE_RUNNING_1P)
+//         {
+         //Toast.makeText(c, xPosition1 + "",Toast.LENGTH_LONG).show();
+         int battXPos = (int) xPosition1;
+         battXPos = getValue(battXPos);
+         if(battXPos <= 0){
+            battXPos = 0;
+         }
+         battBottom.setxPosition(battXPos);
+         if (battBottom.IsMaximumRight(canvasWidth))
+            battBottom.SetMaximumRight(canvasWidth);
 
 
-         }
-         else if (currentState == STATE_RUNNING_2P)
-         {
-            if (yPosition1 < yPosition2)
-            {
-               SetBattsPosition((int) xPosition1, (int) xPosition2);
-            }
-            else
-            {
-               SetBattsPosition((int) xPosition2, (int) xPosition1);
-            }
-         }
+//         }
+
+//         else if (currentState == STATE_RUNNING_2P)
+//         {
+//            if (yPosition1 < yPosition2)
+//            {
+//               SetBattsPosition((int) xPosition1, (int) xPosition2);
+//            }
+//            else
+//            {
+//               SetBattsPosition((int) xPosition2, (int) xPosition1);
+//            }
+//         }
       }
    }
 

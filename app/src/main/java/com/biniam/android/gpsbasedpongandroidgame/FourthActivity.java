@@ -1,6 +1,7 @@
 package com.biniam.android.gpsbasedpongandroidgame;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +22,7 @@ public class FourthActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_fourth);
         receivedIntent = getIntent();
 
@@ -69,5 +71,6 @@ public class FourthActivity extends ActionBarActivity {
         startActivity(intent);
 
     }
+
 
 }

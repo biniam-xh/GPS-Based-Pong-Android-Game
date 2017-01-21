@@ -3,6 +3,7 @@ package com.biniam.android.gpsbasedpongandroidgame;
 import android.*;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -78,7 +79,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             //sets the layout of the activity
             setContentView(R.layout.activity_third);
 
@@ -283,6 +284,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 // Callback is called from the main thread, so we can modify the ImageView safely.
 
                 intent.putExtra("bitmap",createImageFromBitmap(snapshot));
+                Constants.bitmap = snapshot;
                 //intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
                 //startActivity(intent);
 
@@ -410,6 +412,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                     lowerRightMarker.remove();
                     lowerLeftMarker.remove();
 
+                    mMap.setMyLocationEnabled(false);
                     mMap.snapshot(callback);
                     startActivity(intent);
                 }
@@ -476,6 +479,7 @@ public class ThirdActivity extends AppCompatActivity implements OnMapReadyCallba
                 e.printStackTrace();
                 fileName = null;
             }
+
             return fileName;
         }
 

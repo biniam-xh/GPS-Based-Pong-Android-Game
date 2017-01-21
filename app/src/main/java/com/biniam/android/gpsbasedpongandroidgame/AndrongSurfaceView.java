@@ -79,6 +79,8 @@ public class AndrongSurfaceView extends SurfaceView implements SurfaceHolder.Cal
             {
 //               Toast toast = Toast.makeText(context, bundle.getString("toast"), Toast.LENGTH_LONG);
 //               toast.show();
+               Constants.gameOver = true;
+
                Intent intent = new Intent(context, SeventhActivity.class);
                context.startActivity(intent);
                //finalScoreBoard.setVisibility(VISIBLE);

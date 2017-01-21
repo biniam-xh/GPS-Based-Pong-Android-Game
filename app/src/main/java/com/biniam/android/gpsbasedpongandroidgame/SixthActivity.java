@@ -38,7 +38,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 
-public class SixthActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback
+public class SixthActivity extends AppCompatActivity
          {
 
     public GoogleMap mMap;
@@ -52,17 +52,8 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sixth);
 
-        c = getApplicationContext();
-        receivedIntent = getIntent();
-        intent = new Intent(this,AndrongActivity.class);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map6);
-        mapFragment.getMapAsync(this);
+
     }
 
     /**
@@ -74,146 +65,6 @@ public class SixthActivity extends AppCompatActivity implements OnMapReadyCallba
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setOnMapLoadedCallback(this);
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        final View mapView = getSupportFragmentManager().findFragmentById(R.id.map6).getView();
-        if (mapView.getViewTreeObserver().isAlive()) {
-            mapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @SuppressWarnings("deprecation") // We use the new method when supported
-                @SuppressLint("NewApi") // We check which build version we are using.
-                @Override
-                public void onGlobalLayout() {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                        mapView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    } else {
-                        mapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-
-                    //takeSnapshot();
-
-                }
-            });
-        }
-    }
-    public void showMap(){
-
-        /////////
-        Bundle b=this.getIntent().getExtras();
-        double[] upperLeftLoc = b.getDoubleArray("upperLeftLoc");
-        double[] upperRightLoc = b.getDoubleArray("upperRightLoc");
-        double[] lowerRightLoc = b.getDoubleArray("lowerRightLoc");
-        double[] lowerLeftLoc = b.getDoubleArray("lowerLeftLoc");
-        double zoomLevel = b.getDouble("zoomLevel");
-        int playerType = b.getInt("playerType");
-        int mode = b.getInt("mode");
-
-        LatLng upperLeftLatLng = new LatLng(upperLeftLoc[0], upperLeftLoc[1]);
-        LatLng upperRightLatLng = new LatLng(upperRightLoc[0],upperRightLoc[1]);
-        LatLng lowerRightLatLng = new LatLng(lowerRightLoc[0],lowerRightLoc[1]);
-        LatLng lowerLeftLatLng = new LatLng(lowerLeftLoc[0],lowerLeftLoc[1]);
-
-
-        LatLngBounds.Builder boundsBuilder = LatLngBounds.builder()
-                .include(upperLeftLatLng)
-                .include(upperRightLatLng)
-                .include(lowerRightLatLng)
-                .include(lowerLeftLatLng);
-        LatLng centerLatLng = boundsBuilder.build().getCenter();
-        double[] center = {centerLatLng.latitude,centerLatLng.longitude};
-
-
-       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(upperLeftLoc[0], upperLeftLoc[1]), 20));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 0));
-
-        disableGestures();
-
-
-
-
-    }
-    public boolean checkLocationPermission(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Asking user if explanation is needed
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
-             public void disableGestures(){
-                 mMap.getUiSettings().setMapToolbarEnabled(false);
-                 mMap.getUiSettings().setZoomGesturesEnabled(false);
-                 mMap.getUiSettings().setScrollGesturesEnabled(false);
-                 mMap.getUiSettings().setTiltGesturesEnabled(false);
-                 mMap.getUiSettings().setRotateGesturesEnabled(false);
-             }
-
-
-
-                 final GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
-
-                     @Override
-                     public void onSnapshotReady(Bitmap snapshot) {
-                         // Callback is called from the main thread, so we can modify the ImageView safely.
-
-                         //intent.putExtra("bitmap",createImageFromBitmap(snapshot));
-                         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
-                         startActivity(intent);
-
-                     }
-                 };
-
-
-                 //mMap.snapshot(callback);
-
-
-             public String createImageFromBitmap(Bitmap bitmap) {
-                 String fileName = "myImage";//no .png or .jpg needed
-                 try {
-                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                     FileOutputStream fo = openFileOutput(fileName, Context.MODE_PRIVATE);
-                     fo.write(bytes.toByteArray());
-                     // remember close file output
-                     fo.close();
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                     fileName = null;
-                 }
-                 return fileName;
-             }
-
-
-             @Override
-             public void onMapLoaded() {
-                 //Toast.makeText(c,"hey",Toast.LENGTH_LONG).show();
-                 showMap();
-                 mMap.snapshot(callback);
-             }
 
 
          }

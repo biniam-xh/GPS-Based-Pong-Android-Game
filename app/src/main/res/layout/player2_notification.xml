@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ViewSwitcher4"
+    android:background="@drawable/bg1">
+
+    <RelativeLayout
+        android:background="@drawable/bg1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="WAITING FOR THE 2nd PLAYER"
+            android:id="@+id/waitingText"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/progressbar"
+            android:textSize="20dp"
+            android:layout_marginTop="30dp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:background="@drawable/bg1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+
+        <TextView
+            android:text="Unable to connect with the server."
+            android:id="@+id/succesText"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginTop="200dp"
+            android:textColor="#FFFFFF"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+
+
+</ViewSwitcher>

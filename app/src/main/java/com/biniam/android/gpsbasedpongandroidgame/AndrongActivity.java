@@ -1,11 +1,13 @@
 package com.biniam.android.gpsbasedpongandroidgame;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 
 public class AndrongActivity extends Activity implements SensorEventListener
 {
@@ -36,6 +43,7 @@ public class AndrongActivity extends Activity implements SensorEventListener
       super.onCreate(savedInstanceState);
       requestWindowFeature(Window.FEATURE_NO_TITLE);
       setContentView(R.layout.main);
+      setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
       scoreText =(TextView)findViewById(R.id.socre);
       speedText = (TextView)findViewById(R.id.speed);
       liveText = (TextView)findViewById(R.id.lives);
@@ -62,8 +70,35 @@ public class AndrongActivity extends Activity implements SensorEventListener
            androidPongThread.doStart1p();
        }
        if(b.getInt("playerType") == 2){
+          Log.e("multiplayer selected", 1 + "  androng");
            androidPongThread.doStart2p();
+          final Thread thread = new Thread(new Runnable() {
+             @Override
+             public void run() {
+                try {
+                   DataInputStream fromServer = new DataInputStream(Constants.getSocket().getInputStream());
+                   DataOutputStream toServer = new DataOutputStream(Constants.getSocket().getOutputStream());
+                   Log.e("socket established", 1 + "  androng");
+                   while(!Constants.gameOver) {
+                      toServer.writeInt((int) androidPongThread.getXValue());
+                      int k = 0;
+                      Log.e("x sent to server", androidPongThread.getXValue() + "  androng");
+                      k = fromServer.readInt();
+                      androidPongThread.setOpp(k);
+                      Log.e("x received from server", k + "  androng");
+                      //Thread.sleep(100);
+                   }
+
+                }
+                catch (IOException e) {
+                   e.printStackTrace();
+                }
+             }
+          });
+          thread.start();
+
        }
+
 
 
    }
