@@ -51,14 +51,7 @@ public class AndrongActivity extends Activity implements SensorEventListener
       //pongSurfaceView.setTextView((TextView) findViewById(R.id.text));
       finalBoard = (LinearLayout)findViewById(R.id.finalScene);
       playAgain  = (Button)findViewById(R.id.Retry);
-      playAgain.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             androidPongThread.playAgian();
-            finalBoard.setVisibility(View.INVISIBLE);
-         }
 
-      });
       pongSurfaceView.setLinear(finalBoard);
       pongSurfaceView.setScoreText(scoreText);
       pongSurfaceView.setLiveText(liveText);
@@ -66,13 +59,16 @@ public class AndrongActivity extends Activity implements SensorEventListener
       androidPongThread = pongSurfaceView.getAndroidPongThread();
 
        Bundle b = getIntent().getExtras();
+      Log.e("player", 122222222 + "  androng");
        if(b.getInt("playerType") == 1){
            androidPongThread.doStart1p();
        }
        if(b.getInt("playerType") == 2){
           Log.e("multiplayer selected", 1 + "  androng");
            androidPongThread.doStart2p();
-          final Thread thread = new Thread(new Runnable() {
+          Toast.makeText(getApplicationContext(),"multiplayer", Toast.LENGTH_LONG).show();
+
+          Thread thread = new Thread(new Runnable() {
              @Override
              public void run() {
                 try {
@@ -86,7 +82,7 @@ public class AndrongActivity extends Activity implements SensorEventListener
                       k = fromServer.readInt();
                       androidPongThread.setOpp(k);
                       Log.e("x received from server", k + "  androng");
-                      //Thread.sleep(100);
+                      //Thread.sleep(300);
                    }
 
                 }

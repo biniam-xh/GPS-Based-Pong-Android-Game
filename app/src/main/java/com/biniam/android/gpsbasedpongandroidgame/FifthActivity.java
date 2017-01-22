@@ -1,11 +1,13 @@
 package com.biniam.android.gpsbasedpongandroidgame;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ import java.net.Socket;
 
 public class FifthActivity extends ActionBarActivity {
 
+    public Context context;
     public int playerType;
     public Intent receivedIntent;
     public ViewSwitcher switcher;
@@ -62,6 +65,7 @@ public class FifthActivity extends ActionBarActivity {
         setContentView(R.layout.activity_fifth);
         playerType = getIntent().getExtras().getInt("playerType");
         receivedIntent = getIntent();
+        context = getApplicationContext();
 
 
     }
@@ -82,7 +86,8 @@ public class FifthActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            SettingDialogFragment settingDialog = new SettingDialogFragment();
+            settingDialog.show(getFragmentManager(),"settings");
         }
 
         return super.onOptionsItemSelected(item);
@@ -198,6 +203,8 @@ public class FifthActivity extends ActionBarActivity {
                     // Use this handler so than you can update the UI from a thread
                     Refresh.sendEmptyMessage(CONNECTION_FAILED);
                 } catch(Exception e){
+
+
                 }
             }
         }.start();
@@ -267,6 +274,7 @@ public class FifthActivity extends ActionBarActivity {
     }
 
     class Client{
+
         private DataInputStream fromServer;
         private DataOutputStream toServer;
         SharedPreferences sharedpreferences = getSharedPreferences("com.biniam.android.gpsbasedpongandroidgame_preference_file_key",MODE_PRIVATE);
@@ -311,6 +319,8 @@ public class FifthActivity extends ActionBarActivity {
                             toServer.writeInt(1);
                             toServer.writeInt(code);
 
+
+
                             Thread newThread = new Thread(new Runnable(){
                                 @Override
                                 public void run() {
@@ -347,21 +357,35 @@ public class FifthActivity extends ActionBarActivity {
                                                 if(response == 1){
                                                     // image sent and received
                                                     Log.e("Image", response + "  sent");
-                                                    Intent intent = new Intent(getApplicationContext(), AndrongActivity.class);
-                                                    Constants.setSocket(socket);
-                                                    intent.fillIn(receivedIntent,Intent.FILL_IN_DATA);
 
+                                                    Constants.setSocket(socket);
                                                     //toServer = new DataOutputStream(socket.getOutputStream());
                                                     toServer.writeInt(1);
+                                                    Handler handler = new Handler(Looper.getMainLooper());
+                                                    handler.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            playerOn = false;
+
+                                                            Intent intent = new Intent(context, AndrongActivity.class);
+                                                            intent.fillIn(receivedIntent,Intent.FILL_IN_DATA);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                            context.startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    });
+
                                                     Log.e("ssssssssssssssss", response + "started");
+
                                                     //playerSoc.close();
                                                     //continue to game
 
-                                                    getApplicationContext().startActivity(intent);
                                                 }
+
 
                                             } catch (FileNotFoundException e) {
                                                 e.printStackTrace();
+                                                Log.e("ssssssssssssssss", e + "started");
                                             }
 
 
@@ -433,8 +457,10 @@ public class FifthActivity extends ActionBarActivity {
 
                                     toPlayer1.writeInt(1);
                                     Log.e("22222222222222s", 1 + "started");
-
+                                    playerOn = false;
+                                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     getApplicationContext().startActivity(intent);
+                                    finish();
 
 
                                 }
@@ -456,6 +482,11 @@ public class FifthActivity extends ActionBarActivity {
         }
 
 
+    }
+    public synchronized void startGame(){
+        Intent intent = new Intent(getApplicationContext(), AndrongActivity.class);
+        intent.fillIn(receivedIntent,Intent.FILL_IN_DATA);
+        getApplicationContext().startActivity(intent);
     }
 
 }

@@ -13,10 +13,6 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-
-
 public class AndrongThread extends Thread
 {
    private final SurfaceHolder surfaceHolder;
@@ -252,7 +248,6 @@ public class AndrongThread extends Thread
       AddToastToQueue(score.CreateWinnerBoard());
       //AddToastToQueue("Select Menu for a new game.");
       ResetGame();
-      //isRunning = false;
    }
 
    private void AdvanceBall(double frameTime)

@@ -45,7 +45,8 @@ public class FourthActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            SettingDialogFragment settingDialog = new SettingDialogFragment();
+            settingDialog.show(getFragmentManager(),"settings");
         }
 
         return super.onOptionsItemSelected(item);
