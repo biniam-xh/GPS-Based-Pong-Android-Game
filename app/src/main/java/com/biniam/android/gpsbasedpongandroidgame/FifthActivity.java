@@ -99,8 +99,8 @@ public class FifthActivity extends ActionBarActivity {
         intent.fillIn(receivedIntent, Intent.FILL_IN_DATA);
         Bundle b = getIntent().getExtras();
         int type = b.getInt("playerType");
-        VelocityGenerator.MinimumXSpeed = 300;
-        VelocityGenerator.MinimumYSpeed = 300;
+        VelocityGenerator.MinimumXSpeed = 200;
+        VelocityGenerator.MinimumYSpeed = 200;
         if(type == 2){
             multiPlayerSelected();
         }
@@ -360,11 +360,11 @@ public class FifthActivity extends ActionBarActivity {
 
                                                     Constants.setSocket(socket);
                                                     //toServer = new DataOutputStream(socket.getOutputStream());
-                                                    toServer.writeInt(1);
-                                                    Handler handler = new Handler(Looper.getMainLooper());
-                                                    handler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
+//                                                    toServer.writeInt(1);
+//                                                    Handler handler = new Handler(Looper.getMainLooper());
+//                                                    handler.post(new Runnable() {
+//                                                        @Override
+//                                                        public void run() {
                                                             playerOn = false;
 
                                                             Intent intent = new Intent(context, AndrongActivity.class);
@@ -372,10 +372,10 @@ public class FifthActivity extends ActionBarActivity {
                                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                             context.startActivity(intent);
                                                             finish();
-                                                        }
-                                                    });
+//                                                        }
+//                                                    });
 
-                                                    Log.e("ssssssssssssssss", response + "started");
+
 
                                                     //playerSoc.close();
                                                     //continue to game
@@ -458,7 +458,7 @@ public class FifthActivity extends ActionBarActivity {
                                     toPlayer1.writeInt(1);
                                     Log.e("22222222222222s", 1 + "started");
                                     playerOn = false;
-                                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     getApplicationContext().startActivity(intent);
                                     finish();
 
