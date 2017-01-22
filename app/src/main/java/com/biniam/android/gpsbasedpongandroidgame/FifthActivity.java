@@ -360,8 +360,8 @@ public class FifthActivity extends ActionBarActivity {
 
                                                     Constants.setSocket(socket);
                                                     //toServer = new DataOutputStream(socket.getOutputStream());
-//                                                    toServer.writeInt(1);
-//                                                    Handler handler = new Handler(Looper.getMainLooper());
+                                                    toServer.writeInt(1);
+//                                                   Handler handler = new Handler(Looper.getMainLooper());
 //                                                    handler.post(new Runnable() {
 //                                                        @Override
 //                                                        public void run() {
